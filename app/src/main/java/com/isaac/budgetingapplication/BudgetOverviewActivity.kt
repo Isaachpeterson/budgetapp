@@ -28,13 +28,22 @@ class BudgetOverviewActivity : AppCompatActivity() {
             categoryNameTextView.text = categoryName
 
             val categoryProgressBar = categoryProgressView.findViewById<ProgressBar>(R.id.progress_bar_category)
-// Set the progress bar max value based on the category percentage and total income.
+            val textProgress = categoryProgressView.findViewById<TextView>(R.id.text_progress)
+
+            // Set the progress bar max value based on the category percentage and total income.
             val income = getSavedIncome() ?: 0f
             val categoryMaxValue = (income * (categoryPercentage.toFloatOrNull() ?: 0f) / 100).toInt()
             categoryProgressBar.max = categoryMaxValue
+
+            // Assuming you have the amount spent and total amount able to spend:
+            val amountSpent = 0 // Replace this with the actual amount spent
+            categoryProgressBar.progress = amountSpent
+            textProgress.text = "$$amountSpent/$$categoryMaxValue"
+
             linearLayoutCategoryProgress.addView(categoryProgressView)
         }
     }
+
     private fun getSavedIncome(): Float? {
         val sharedPreferences = getSharedPreferences("budget_preferences", Context.MODE_PRIVATE)
         return if (sharedPreferences.contains("monthly_income")) {

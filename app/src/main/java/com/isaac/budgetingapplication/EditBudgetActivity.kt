@@ -3,6 +3,8 @@ package com.isaac.budgetingapplication
 import android.content.Context
 import android.os.Bundle
 import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
 import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
 
@@ -15,6 +17,8 @@ class EditBudgetActivity : AppCompatActivity() {
         val linearLayoutCategories = findViewById<LinearLayout>(R.id.linear_layout_categories)
         val textMoneyLeft = findViewById<TextView>(R.id.text_money_left)
 
+        loadSavedCategories(linearLayoutCategories)
+
         // Get the saved income
         val savedIncome = getSavedIncome()
         if (savedIncome != null) {
@@ -24,7 +28,7 @@ class EditBudgetActivity : AppCompatActivity() {
         }
 
         buttonCreateCategory.setOnClickListener {
-            val categoryView = LayoutInflater.from(this).inflate(R.layout.category_item, null, false)
+            val categoryView = createCategoryView()
             linearLayoutCategories.addView(categoryView)
         }
 
@@ -61,5 +65,34 @@ class EditBudgetActivity : AppCompatActivity() {
         } else {
             null
         }
+    }
+
+    private fun loadSavedCategories(linearLayoutCategories: LinearLayout) {
+        val sharedPreferences = getSharedPreferences("budget_preferences", Context.MODE_PRIVATE)
+        val categoriesCount = sharedPreferences.getInt("categories_count", 0)
+
+        for (i in 0 until categoriesCount) {
+            val categoryName = sharedPreferences.getString("category_name_$i", "")
+            val categoryPercentage = sharedPreferences.getString("category_percentage_$i", "")
+
+            val categoryView = createCategoryView()
+            categoryView.findViewById<EditText>(R.id.edit_category_name).setText(categoryName)
+            categoryView.findViewById<EditText>(R.id.edit_percentage).setText(categoryPercentage)
+
+            linearLayoutCategories.addView(categoryView)
+        }
+    }
+
+    private fun createCategoryView(): View {
+        val categoryView = LayoutInflater.from(this).inflate(R.layout.category_item, null, false)
+
+        val deleteButton = Button(this)
+        deleteButton.text = "Delete"
+        deleteButton.setOnClickListener {
+            (categoryView.parent as? ViewGroup)?.removeView(categoryView)
+        }
+
+        categoryView.findViewById<LinearLayout>(R.id.category_item_container).addView(deleteButton)
+        return categoryView
     }
 }
