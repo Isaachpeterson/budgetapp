@@ -12,12 +12,6 @@ class DashboardActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_dashboard)
 
-        val buttonBudgetType = findViewById<Button>(R.id.button_budget_type)
-        buttonBudgetType.setOnClickListener {
-            val intent = Intent(this, SalaryBudgetActivity::class.java)
-            startActivity(intent)
-        }
-
         val buttonSetIncome = findViewById<Button>(R.id.button_set_income)
         buttonSetIncome.setOnClickListener {
             val intent = Intent(this, SetIncomeActivity::class.java)
@@ -36,13 +30,16 @@ class DashboardActivity : AppCompatActivity() {
             startActivity(intent)
         }
 
-        updateBudgetTypeTextView()
+        val buttonSavings = findViewById<Button>(R.id.button_savings).setOnClickListener {
+            val intent = Intent(this, SavingsActivity::class.java)
+            startActivity(intent)
+        }
+
         updateSavedIncomeTextView()
     }
 
     override fun onResume() {
         super.onResume()
-        updateBudgetTypeTextView()
         updateSavedIncomeTextView()
     }
 
@@ -57,18 +54,6 @@ class DashboardActivity : AppCompatActivity() {
             sharedPreferences.getFloat("monthly_income", 0f)
         } else {
             null
-        }
-    }
-
-
-    private fun updateBudgetTypeTextView() {
-        val currentBudgetType = getBudgetType()
-        val textViewCurrentBudgetType = findViewById<TextView>(R.id.text_current_budget_type)
-
-        if (currentBudgetType != null) {
-            textViewCurrentBudgetType.text = "Current Budget Type: $currentBudgetType"
-        } else {
-            textViewCurrentBudgetType.text = "Current Budget Type: Not set"
         }
     }
 

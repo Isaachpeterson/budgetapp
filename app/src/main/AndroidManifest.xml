@@ -12,8 +12,10 @@
         android:theme="@style/Theme.BudgetingApplication"
         tools:targetApi="31">
         <activity
-            android:name=".BudgetOverviewActivity"
+            android:name=".SavingsActivity"
             android:exported="false" />
+        <activity
+            android:name=".BudgetOverviewActivity"/>
         <activity
             android:name=".EditBudgetActivity"
             android:exported="false" />
@@ -29,12 +31,6 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity
-            android:name=".SalaryBudgetActivity"
-            android:exported="false" />
-        <activity
-            android:name=".MainActivity"
-            android:exported="true" />
     </application>
 
 </manifest>
